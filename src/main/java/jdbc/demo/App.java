@@ -3,6 +3,7 @@ package jdbc.demo;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,17 +18,18 @@ public class App {
 
 		// Read Data Method For Read data from database
 		readDataFromDatabase();
-		// Update Basic pay(salery)
+		// Update Basic pay(salery) using PreparedStatement
 		updateBasicPay();
 		con.close();
 
 	}
-
+//Method For Update Basic Pay using PreparedStatement
 	private static void updateBasicPay() {
 		try {
-			Statement statement = con.createStatement();
-			String sql = "UPDATE employee_payroll_p set basic_pay =3000000.00 where Name = 'Terisa' ";
-			Integer tableUpdated = statement.executeUpdate(sql);
+			
+			String sql = "UPDATE employee_payroll_p set basic_pay =5000000.00 where Name = 'Terisa' ";		
+			PreparedStatement prstm= (PreparedStatement) con.prepareStatement(sql);
+	    	prstm.executeUpdate(sql);
 			
 			System.out.println("Updatated Table");
 			readDataFromDatabase();
