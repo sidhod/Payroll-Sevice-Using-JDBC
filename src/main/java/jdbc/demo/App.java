@@ -12,8 +12,29 @@ public class App {
 	static Connection con;
 
 	public static void main(String[] args) throws SQLException {
+		// Database Connection
 		databaseConnection();
-		ReadDataFromDatabase();
+
+		// Read Data Method For Read data from database
+		readDataFromDatabase();
+		// Update Basic pay(salery)
+		updateBasicPay();
+		con.close();
+
+	}
+
+	private static void updateBasicPay() {
+		try {
+			Statement statement = con.createStatement();
+			String sql = "UPDATE employee_payroll_p set basic_pay =3000000.00 where Name = 'Terisa' ";
+			Integer tableUpdated = statement.executeUpdate(sql);
+			
+			System.out.println("Updatated Table");
+			readDataFromDatabase();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -55,7 +76,7 @@ public class App {
 	}
 
 	// Method For reading Data from data base
-	private static void ReadDataFromDatabase() {
+	private static void readDataFromDatabase() {
 		try {
 			Statement statement = con.createStatement();
 			ResultSet result = statement.executeQuery("Select * from employee_payroll_p");
@@ -64,6 +85,7 @@ public class App {
 				System.out.println("ID: " + result.getInt("id"));
 				System.out.println("Name: " + result.getString("Name"));
 				System.out.println("Gender: " + result.getString("gender"));
+				System.out.println("Gender: " + result.getString("basic_pay"));
 				System.out.println("Starting Date: " + result.getString("start") + "\n");
 			}
 		} catch (SQLException e) {
