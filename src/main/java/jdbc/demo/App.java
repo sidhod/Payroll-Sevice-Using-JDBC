@@ -24,7 +24,54 @@ public class App {
 		readDataByNameUsingPreparedStatement();
 		// Method To read data of particular date range
 		readDataByStartPerticularStartDateRange();
+		// Method For Use DataBase Function
+		dataBaseFunctions();
 		con.close();
+
+	}
+
+	// Method For Use DataBase Function SUM(),AVG(),MAX(),MIN() and Count
+	private static void dataBaseFunctions() {
+		try {
+			Statement statement = con.createStatement();
+			ResultSet result = statement
+					.executeQuery("SELECT SUM(basic_pay), gender FROM employee_payroll_p GROUP BY gender;");
+			System.out.println("\n:: Sum ::");
+			while (result.next()) {
+				System.out.print("SUM(Salary)->" + result.getString("SUM(basic_pay)") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+
+			result = statement.executeQuery("SELECT MIN(basic_pay), gender FROM employee_payroll_p GROUP BY gender;");
+			System.out.println("\n:: Minimum ::");
+			while (result.next()) {
+				System.out.print("MIN(Salary)->" + result.getString("MIN(basic_pay)") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+
+			result = statement.executeQuery("SELECT MAX(basic_pay), gender FROM employee_payroll_p GROUP BY gender;");
+			System.out.println("\n:: Maximum ::");
+			while (result.next()) {
+				System.out.print("MAX(Salary)->" + result.getString("MAX(basic_pay)") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+
+			result = statement.executeQuery("SELECT AVG(basic_pay), gender FROM employee_payroll_p GROUP BY gender;");
+			System.out.println("\n:: Average ::");
+			while (result.next()) {
+				System.out.print("AVG(Salary)->" + result.getString("AVG(basic_pay)") + " : ");
+				System.out.print("Gender->" + result.getString("Gender") + "\n");
+			}
+
+			result = statement.executeQuery("SELECT COUNT(gender), gender FROM employee_payroll_p GROUP BY gender;");
+			System.out.println("\n:: Employee Count ::");
+			while (result.next()) {
+				System.out.print("COUNT(gender)->" + result.getString("COUNT(gender)") + " : ");
+				System.out.print("Gender->" + result.getString("gender") + "\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -32,7 +79,7 @@ public class App {
 		try {
 
 			PreparedStatement prstm = (PreparedStatement) con.prepareStatement(
-					"SELECT * FROM employee_payroll_p WHERE start BETWEEN CAST(? AS DATE) AND DATE(NOW());");
+					"SELECT * FROM employee_payroll_p WHERE start BETWEEN CAST(? AS DATE) AND DATE(NOW())");
 			prstm.setString(1, "2022-01-01");
 			System.out
 					.println("Retrieve all employees who have joined in a particular date range(2022-01-01 to today)");
@@ -59,7 +106,7 @@ public class App {
 					.prepareStatement("Select * from employee_payroll_p WHERE Name=?");
 			prstm.setString(1, "Terisa");
 			System.out.println("Data From Employee Payroll table.");
-			ResultSet result = prstm.executeQuery("Select * from employee_payroll_p");
+			ResultSet result = prstm.executeQuery();
 			while (result.next()) {
 				System.out.println("ID: " + result.getInt("id"));
 				System.out.println("Name: " + result.getString("Name"));
