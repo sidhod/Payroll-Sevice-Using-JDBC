@@ -20,41 +20,68 @@ public class App {
 		readDataFromDatabase();
 		// Update Basic pay(salery) using PreparedStatement
 		updateBasicPay();
-		//Read Data By Name Method 
+		// Read Data By Name Method
 		readDataByNameUsingPreparedStatement();
+		// Method To read data of particular date range
+		readDataByStartPerticularStartDateRange();
 		con.close();
 
 	}
-//Method For Read data By Name Using PreparedStatement
-private static void readDataByNameUsingPreparedStatement() {
-	
-	try {
-		
-		PreparedStatement prstm = (PreparedStatement) con.prepareStatement("Select * from employee_payroll_p WHERE Name=?");
-		prstm.setString(1, "Terisa");
-		System.out.println("Data From Employee Payroll table.");
-		ResultSet result = prstm.executeQuery("Select * from employee_payroll_p");
-		while (result.next()) {
-			System.out.println("ID: " + result.getInt("id"));
-			System.out.println("Name: " + result.getString("Name"));
-			System.out.println("Gender: " + result.getString("gender"));
-			System.out.println("Gender: " + result.getString("basic_pay"));
-			System.out.println("Starting Date: " + result.getString("start") + "\n");
+
+	private static void readDataByStartPerticularStartDateRange() {
+		try {
+
+			PreparedStatement prstm = (PreparedStatement) con.prepareStatement(
+					"SELECT * FROM employee_payroll_p WHERE start BETWEEN CAST(? AS DATE) AND DATE(NOW());");
+			prstm.setString(1, "2022-01-01");
+			System.out
+					.println("Retrieve all employees who have joined in a particular date range(2022-01-01 to today)");
+			ResultSet result = prstm.executeQuery();
+			while (result.next()) {
+				System.out.print("ID: " + result.getInt("id") + " ");
+				System.out.print("Name: " + result.getString("Name") + " ");
+				System.out.print("Gender: " + result.getString("gender") + " ");
+				System.out.print("Salary: " + result.getString("basic_pay") + " ");
+				System.out.print("Starting Date: " + result.getString("start") + "\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-	} catch (SQLException e) {
-		e.printStackTrace();
-	}	
+
+	}
+
+//Method For Read data By Name Using PreparedStatement
+	private static void readDataByNameUsingPreparedStatement() {
+
+		try {
+
+			PreparedStatement prstm = (PreparedStatement) con
+					.prepareStatement("Select * from employee_payroll_p WHERE Name=?");
+			prstm.setString(1, "Terisa");
+			System.out.println("Data From Employee Payroll table.");
+			ResultSet result = prstm.executeQuery("Select * from employee_payroll_p");
+			while (result.next()) {
+				System.out.println("ID: " + result.getInt("id"));
+				System.out.println("Name: " + result.getString("Name"));
+				System.out.println("Gender: " + result.getString("gender"));
+				System.out.println("salary: " + result.getString("basic_pay"));
+				System.out.println("Starting Date: " + result.getString("start") + "\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 //Method For Update Basic Pay using PreparedStatement
 	private static void updateBasicPay() {
 		try {
 
-			PreparedStatement prstm = (PreparedStatement) con.prepareStatement("UPDATE employee_payroll_p set basic_pay = ? where Name =?");
+			PreparedStatement prstm = (PreparedStatement) con
+					.prepareStatement("UPDATE employee_payroll_p set basic_pay = ? where Name =?");
 			prstm.setDouble(1, 5000000.00);
 			prstm.setString(2, "Terisa");
 			Integer recordUpdated = prstm.executeUpdate();
-			System.out.println("Updatated Table"+recordUpdated);
+			System.out.println("Updatated Table" + recordUpdated);
 			readDataFromDatabase();
 
 		} catch (SQLException e) {
@@ -110,7 +137,7 @@ private static void readDataByNameUsingPreparedStatement() {
 				System.out.println("ID: " + result.getInt("id"));
 				System.out.println("Name: " + result.getString("Name"));
 				System.out.println("Gender: " + result.getString("gender"));
-				System.out.println("Gender: " + result.getString("basic_pay"));
+				System.out.println("Salary: " + result.getString("basic_pay"));
 				System.out.println("Starting Date: " + result.getString("start") + "\n");
 			}
 		} catch (SQLException e) {
