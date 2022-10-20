@@ -26,6 +26,8 @@ public class App {
 		readDataByStartPerticularStartDateRange();
 		// Method For Use DataBase Function
 		dataBaseFunctions();
+		//Method To Insert New Employee
+		insertNewEmployee();
 		con.close();
 
 	}
@@ -192,4 +194,24 @@ public class App {
 		}
 
 	}
+	// Insert A New Employee in database
+		private static void insertNewEmployee() {
+			try {
+				String query = "INSERT INTO employee_payroll_p (Name, phone_number, address, gender, basic_pay, start) VALUES (?,?,?,?,?,?,?)";
+				PreparedStatement prstm = (PreparedStatement) con
+						.prepareStatement(query);
+				prstm.setString(1, "Sidh");				
+				prstm.setString(2, "9822271377");
+				prstm.setString(3, "Bhor");
+				prstm.setString(4, "Sales");
+				prstm.setString(5, "M");
+				prstm.setDouble(6, 1000000.00);
+				prstm.setDate(7, java.sql.Date.valueOf("2019-08-07"));				
+			    prstm.executeUpdate();
+				System.out.println("Update Table");
+				readDataFromDatabase(); 
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 }
